@@ -3,24 +3,13 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-  mode: process.env.NODE_ENV === 'development' ? 'development' : 'production',
-  devtool: process.env.NODE_ENV === 'development' ? 'inline-source-map' : 'source-map',
-  entry: './src/index.js',
+  target: 'web',
   output: {
     path: path.resolve(__dirname, 'dist'),
+    publicPath: '/',
   },
   module: {
     rules: [
-      {
-        test: /\.svg/,
-        use: {
-          loader: 'svg-url-loader',
-          options: {
-            // make all svg images to work in IE
-            iesafe: true,
-          },
-        },
-      },
       {
         test: /\.js$/,
         exclude: /node_modules/,
@@ -38,18 +27,13 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+        use: [
+          MiniCssExtractPlugin.loader, 'css-loader',
+        ],
       },
       {
-        test: /\.(png|jpg|gif)$/i,
-        use: [
-          {
-            loader: 'url-loader',
-            options: {
-              limit: 8192,
-            },
-          },
-        ],
+        test: /\.svg$/,
+        type: 'asset/resource',
       },
     ],
   },
